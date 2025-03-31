@@ -25,10 +25,14 @@ Targeted to be used over satellite and HF links from remote locations on basic h
 ---
 
 ## ✨ Features
-✅ Server-side script that communicates with Gmail API  
+✅ Server-side script that communicates with Gmail API
+
 ✅ CLI Client to read, send and manage mail
+
 ✅ Extremely bandwidth-efficient communication (can work over SMS messages, HF links, satellite messages)
+
 ✅ All communication encoded in text-safe Base91 encoding
+
 ✅ Transcoding to minimal huffman-encoded charset - less than 5 bits per character on average
 
 ---
