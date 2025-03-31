@@ -90,5 +90,5 @@ def unicode_to_default_charset(inp):
             # drop the char
             pass
 
-    return outp
+    return str(outp)
 

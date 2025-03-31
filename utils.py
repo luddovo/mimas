@@ -1,5 +1,25 @@
 import math
+import unidecode, charset
 from email.header import decode_header
+from email.utils import parseaddr
+
+EMAIL_FOLDERS_ROOT = "emails"
+
+CMD_LENGTH = 3 # in bits
+DATE_LENGTH = 32 # unix timestamp unsigned
+MAX_SIZE_LENGTH = 13 # max 8kb, 0 for no limit
+ID_LENGTH = 16 # bits
+
+CMD_SEND = 1
+CMD_REPLY = 2
+CMD_MARK_READ = 3
+CMD_CHECK_MAIL = 4
+CMD_GET = 5
+
+RESP_LENGTH = 3 # in bits
+RESP_MESSAGE = 1
+RESP_SENT = 2
+RESP_MARKED_READ = 3
 
 def decode_email_subject(subject):
     decoded_parts = decode_header(subject)
@@ -15,6 +35,15 @@ def decode_email_subject(subject):
 
     return decoded_subject
 
+def decode_email_address(email):
+    addresses = email.split(",")  # Split multiple addresses by comma
+    decoded_addresses = []
+
+    for addr in addresses:
+        name, addr = parseaddr(addr.strip())  # Parse each address
+        decoded_addresses.append(addr)  # Append only the email part
+
+    return ", ".join(decoded_addresses)
 
 def scale_numbers(a, b, c, max_value, ta, tb):
     """
@@ -77,3 +106,8 @@ def scale_numbers(a, b, c, max_value, ta, tb):
     
     # If no threshold violations, return proportionally scaled numbers
     return (math.round(a_scaled), math.round(b_scaled), math.round(c_scaled))
+
+def str_encode(s):
+    s = unidecode.unidecode(s)
+    s = charset.unicode_to_default_charset(s)
+    return s          
