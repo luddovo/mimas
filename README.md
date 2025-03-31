@@ -1,0 +1,2 @@
+# mimas
+Minimalist Mail System
