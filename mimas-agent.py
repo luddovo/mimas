@@ -35,7 +35,7 @@ class ProcessCommands:
         mimas_id = self.bsi.read_fixed_width(utils.ID_LENGTH)
         body = self.bsi.read_huffman_string()
         gmail_id = self.ps.get(str(mimas_id))
-        new_gmail_id = gmail.send_reply(gmail_id, body)
+        new_gmail_id = gmail.send_reply(self.gmail_service,gmail_id, body)
         if new_gmail_id:
             self.ps.set(str(mimas_id),str(gmail_id))
             self.bso.write_fixed_width(utils.RESP_SENT, utils.RESP_LENGTH)
@@ -126,7 +126,7 @@ class ProcessCommands:
                 cmd = self.bsi.read_fixed_width(utils.CMD_LENGTH)
                 # run handler
                 self.cmd_map[cmd](self)
-            except IndexError:
+            except (IndexError, KeyError):
                 break
         # export the reply and return it
         out = base91.encode(self.bso.export())

@@ -55,11 +55,12 @@ def get_unread_emails(service, after_date):
 
         # Extract headers (From, Subject, Date)
         for header in msg['payload']['headers']:
-            if header['name'] == 'From':
+            header_name = header['name'].lower()
+            if header_name == 'from':
                 email_data["from"] = header['value']
-            if header['name'] == 'Subject':
+            if header_name == 'subject':
                 email_data["subject"] = header['value']
-            if header['name'] == 'Date':
+            if header_name == 'date':
                 email_data["date"] = header['value']
 
         email_list.append(email_data)
@@ -91,12 +92,12 @@ def send_reply(service, message_id, reply_text):
     # Check for Reply-To header, otherwise fallback to From header
     to_address = None
     for header in headers:
-        if header['name'] == 'Reply-To':
+        if header['name'].lower() == 'reply-to':
             to_address = header['value']
             break
     if not to_address:
         for header in headers:
-            if header['name'] == 'From':
+            if header['name'].lower() == 'from':
                 to_address = header['value']
                 break
 
@@ -104,8 +105,15 @@ def send_reply(service, message_id, reply_text):
         raise("Unable to determine recipient email address.")
         return
 
+    # Find the subject in headers, if it does not exist, set it to an empty string
+    subject = ""
+    for header in headers:
+        if header['name'].lower() == 'subject':
+            subject = header['value']
+            break
+
     # Create the reply message
-    reply_message = create_message('me', to_address, 'Re: ' + message['subject'], reply_text)
+    reply_message = create_message('me', to_address, 'Re: ' + subject, reply_text)
 
     # Send the reply
     send_message = service.users().messages().send(userId='me', body=reply_message).execute()
@@ -127,7 +135,6 @@ def send_email(service, to, subject, text):
             body={'raw': raw_message}
         ).execute()
 
-        print(f"Message sent successfully. Message ID: {sent_message['id']}")
         return sent_message['id']
 
     except:

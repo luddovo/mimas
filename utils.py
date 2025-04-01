@@ -1,7 +1,8 @@
 import math
 import unidecode, charset
+import datetime
 from email.header import decode_header
-from email.utils import parseaddr
+from email.utils import parseaddr, parsedate_to_datetime, parsedate_tz
 
 EMAIL_FOLDERS_ROOT = "emails"
 
@@ -36,14 +37,27 @@ def decode_email_subject(subject):
     return decoded_subject
 
 def decode_email_address(email):
-    addresses = email.split(",")  # Split multiple addresses by comma
-    decoded_addresses = []
+    if email:
+        addresses = email.split(",")  # Split multiple addresses by comma
+        decoded_addresses = []
 
-    for addr in addresses:
-        name, addr = parseaddr(addr.strip())  # Parse each address
-        decoded_addresses.append(addr)  # Append only the email part
+        for addr in addresses:
+            name, addr = parseaddr(addr.strip())  # Parse each address
+            decoded_addresses.append(addr)  # Append only the email part
 
-    return ", ".join(decoded_addresses)
+        return ", ".join(decoded_addresses)
+    else:
+        return ""
+
+def decode_email_date(date_str):
+    if date_str:
+        d = parsedate_to_datetime(date_str)
+        tz = d.tzinfo
+        if tz is None:
+            d = d.replace(tzinfo=datetime.timezone.utc)
+        return d
+    else:
+        return None
 
 def scale_numbers(a, b, c, max_value, ta, tb):
     """
