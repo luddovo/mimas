@@ -2,7 +2,7 @@ import math
 import unidecode, charset
 import datetime
 from email.header import decode_header
-from email.utils import parseaddr, parsedate_to_datetime, parsedate_tz
+from email.utils import parseaddr, parsedate_to_datetime
 
 EMAIL_FOLDERS_ROOT = "emails"
 
@@ -11,6 +11,7 @@ DATE_LENGTH = 32 # unix timestamp unsigned
 MAX_SIZE_LENGTH = 13 # max 8kb, 0 for no limit
 ID_LENGTH = 16 # bits
 
+CMD_NONE = 0
 CMD_SEND = 1
 CMD_REPLY = 2
 CMD_MARK_READ = 3
@@ -18,6 +19,7 @@ CMD_CHECK_MAIL = 4
 CMD_GET = 5
 
 RESP_LENGTH = 3 # in bits
+RESP_NONE = 0
 RESP_MESSAGE = 1
 RESP_SENT = 2
 RESP_MARKED_READ = 3

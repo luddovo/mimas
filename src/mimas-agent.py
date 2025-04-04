@@ -113,6 +113,7 @@ class ProcessCommands:
 
     # CMD_ID HANDLER
     cmd_map = {
+        utils.CMD_NONE: lambda x: None,
         utils.CMD_SEND: send,
         utils.CMD_REPLY: reply,
         utils.CMD_MARK_READ: mark_read,
@@ -124,10 +125,10 @@ class ProcessCommands:
         while True:
             try:
                 cmd = self.bsi.read_fixed_width(utils.CMD_LENGTH)
-                # run handler
-                self.cmd_map[cmd](self)
             except (IndexError, KeyError):
                 break
+                # run handler
+            self.cmd_map[cmd](self)
         # export the reply and return it
         out = base91.encode(self.bso.export())
 

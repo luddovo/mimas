@@ -152,12 +152,13 @@ elif args.command == "new" or args.command == "reply":
                             recipient = recipient.replace("*", "@")
                             subject = f"Re: {msg['Subject']}"
                             mimas_id = msg["X-Mimas-Id"]
+                            mimas_message = msg.get_body(preferencelist=("plain")).get_content()
                             break
 
     # Open vi to compose the message
     with tempfile.NamedTemporaryFile(suffix=".txt", delete=False) as temp_file:
         if args.command == "reply":
-            temp_file.write(msg.get_body(preferencelist=("plain")).get_content().encode())
+            temp_file.write(mimas_message.encode())
         temp_file_path = temp_file.name
 
     subprocess.call(["vi", temp_file_path])
@@ -366,6 +367,7 @@ elif args.command == "receive":
     
 
     resp_map = {
+        utils.RESP_NONE: lambda x: None,
         utils.RESP_MESSAGE: new_message,
         utils.RESP_MARKED_READ: marked_read,
         utils.RESP_SENT: confirm_sent
@@ -374,7 +376,7 @@ elif args.command == "receive":
     while True:
         try:
             resp = bsi.read_fixed_width(utils.CMD_LENGTH)
-            # run handler
-            resp_map[resp](bsi)
         except (IndexError,KeyError):
             break
+            # run handler
+        resp_map[resp](bsi)
