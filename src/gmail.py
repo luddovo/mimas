@@ -1,8 +1,8 @@
 from googleapiclient.discovery import build
 from google.oauth2 import service_account
 import base64
-from email.mime.multipart import MIMEMultipart
 from email.mime.text import MIMEText
+from email.message import EmailMessage
 
 # Path to your Service Account JSON key file
 SERVICE_ACCOUNT_FILE = 'oauth2.json'
@@ -185,15 +185,14 @@ def get_message(service, message_id):
 
 def create_message(sender, to, subject, body):
     """Create an email message."""
-    message = MIMEMultipart()
-    message['to'] = to
-    message['from'] = sender
-    message['subject'] = subject
+    message = EmailMessage()
+    message.set_content(body)
 
-    msg_body = MIMEText(body, 'plain')
-    message.attach(msg_body)
+    message['To'] = to
+    message['From'] = sender
+    message['Subject'] = subject
 
-    # Encode the message in base64
-    raw_message = base64.urlsafe_b64encode(message.as_bytes()).decode()
+    # Base64URL encode (not standard Base64 — Gmail API needs URL-safe)
+    encoded_message = base64.urlsafe_b64encode(message.as_bytes()).decode()
 
-    return {'raw': raw_message}
+    return {'raw': encoded_message}

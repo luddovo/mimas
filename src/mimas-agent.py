@@ -1,8 +1,6 @@
-import sys, datetime, math
-import base91, bitstream, charset, berkeleydbstore
+import sys, datetime
+import base91, bitstream, shelvestore
 import gmail, utils
-from email.utils import parseaddr
-import unidecode
 from dateutil import parser
 
 
@@ -13,7 +11,7 @@ class ProcessCommands:
         self.bsi = bitstream.Bitstream(base91.decode(data))
         self.bso = bitstream.Bitstream()
         self.gmail_service = gmail.authenticate_service_account()
-        self.ps = berkeleydbstore.BerkeleyDBStore("mimas-agent.db3")
+        self.ps = shelvestore.ShelveStore("mimas-agent.db3")
 
         # write last mail check
         self.bso.write_fixed_width(int(datetime.datetime.now(datetime.timezone.utc).timestamp()), utils.DATE_LENGTH)

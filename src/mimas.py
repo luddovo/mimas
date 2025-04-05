@@ -6,14 +6,12 @@ import os
 import email
 from email import policy
 import bitstream
-import berkeleydbstore
+import shelvestore
 import base91
-import gmail
 import utils
 from email.utils import format_datetime
 from dateutil import parser
 from datetime import datetime, timezone
-import unidecode
 import sys
 import tempfile
 import subprocess
@@ -36,7 +34,7 @@ for folder in all_folders:
     folder_path = os.path.join(utils.EMAIL_FOLDERS_ROOT, folder)
     os.makedirs(folder_path, exist_ok=True)
 
-ps = berkeleydbstore.BerkeleyDBStore("mimas.db3")
+ps = shelvestore.ShelveStore("mimas.db3")
 
 # Create main parser
 parser = argparse.ArgumentParser(description="Mimas command-line interface")
