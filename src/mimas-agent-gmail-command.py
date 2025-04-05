@@ -33,7 +33,7 @@ else:
 
         # Run the external script and send email_body to its stdin
         process = subprocess.Popen(
-            ["bin/python", "/home/ludd/work/mimas/src/mimas-agent.py"],
+            ["bin/python", "src/mimas-agent.py"],
             stdin=subprocess.PIPE,
             stdout=subprocess.PIPE,
             stderr=subprocess.PIPE,
