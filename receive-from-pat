@@ -1,0 +1,9 @@
+#!/bin/bash
+
+# Save the directory of the script
+SCRIPT_DIR=$(dirname "$(realpath "$0")")
+
+# Change to the script's directory
+cd "$SCRIPT_DIR"
+
+awk 'BEGIN {body=0} /^[[:space:]]*$/ {body=1; next} body' /home/ludd/.local/share/pat/mailbox/OK7LCH/in/$1.b2f | ./mimas receive

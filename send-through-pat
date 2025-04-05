@@ -1,0 +1,10 @@
+#!/bin/bash
+
+# Save the directory of the script
+SCRIPT_DIR=$(dirname "$(realpath "$0")")
+
+# Change to the script's directory
+cd "$SCRIPT_DIR"
+
+./mimas send 1000 | pat compose -s "Mimas Command" mimas@chovanec.com
+pat connect telnet
