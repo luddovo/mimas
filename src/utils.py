@@ -121,7 +121,7 @@ def scale_numbers(a, b, c, max_value, ta, tb):
                 return (a_new, b_new, c_new)
     
     # If no threshold violations, return proportionally scaled numbers
-    return (math.round(a_scaled), math.round(b_scaled), math.round(c_scaled))
+    return (round(a_scaled), round(b_scaled), round(c_scaled))
 
 def str_encode(s):
     s = unidecode.unidecode(s)
